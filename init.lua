@@ -15,7 +15,7 @@ end
 function moveWindow(direction)
   return function() 
     local win = hs.window.focusedWindow()
-    local moveUnit = 60
+    local moveUnit = 80
 
     if(win) then
       local frame = win:frame()
@@ -53,6 +53,35 @@ function moveToDisplay(direction)
     end
 end
 
+function adjustWindowSize(action)
+  local win = hs.window.focusedWindow()
+  local sizeUnit = 50
+
+  if(win) then
+    local frame = win:frame()
+
+    if(action == '+') then
+      frame.w = frame.w + sizeUnit 
+      frame.h = frame.h + sizeUnit 
+    else 
+      frame.w = frame.w - sizeUnit 
+      frame.h = frame.h - sizeUnit 
+    end
+
+    win:setFrame(frame)
+  end
+
+end
+
+function increaseWindowSize()
+  adjustWindowSize('+')
+end
+
+function decreaseWindowSize()
+  adjustWindowSize('-')
+end
+
+
 hs.hotkey.bind({'shift'}, 'F12', showWindowHints)
 hs.hotkey.bind({'cmd', 'shift'}, 'r', hs.reload)
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'l', moveToDisplay('right'))
@@ -61,3 +90,5 @@ hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', moveWindow('left'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', moveWindow('right'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, ']', increaseWindowSize)
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, '[', decreaseWindowSize)

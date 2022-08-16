@@ -15,7 +15,7 @@ end
 function moveWindow(direction)
   return function() 
     local win = hs.window.focusedWindow()
-    local moveUnit = 30
+    local moveUnit = 80
 
     if(win) then
       local frame = win:frame()
@@ -57,7 +57,7 @@ hs.hotkey.bind({'shift'}, 'F12', showWindowHints)
 hs.hotkey.bind({'cmd', 'shift'}, 'r', hs.reload)
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'l', moveToDisplay('right'))
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'h', moveToDisplay('left'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', nil, nil, moveWindow('left'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', nil, nil, moveWindow('right'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', nil, nil, moveWindow('down'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', nil, nil, moveWindow('up'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', moveWindow('left'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', moveWindow('right'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'))

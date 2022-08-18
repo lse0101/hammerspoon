@@ -81,6 +81,8 @@ function decreaseWindowSize()
   adjustWindowSize('-')
 end
 
+require('aurora')
+
 
 hs.hotkey.bind({'shift'}, 'F12', showWindowHints)
 hs.hotkey.bind({'cmd', 'shift'}, 'r', hs.reload)

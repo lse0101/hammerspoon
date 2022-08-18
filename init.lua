@@ -94,5 +94,3 @@ hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, ']', increaseWindowSize)
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, '[', decreaseWindowSize)
-
-

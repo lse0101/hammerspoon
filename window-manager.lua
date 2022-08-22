@@ -38,7 +38,6 @@ function moveToDisplay(direction)
         local curIdx = getScreenIdx(displays, win:screen())
         local nextIdx = (direction == 'left') and curIdx - 1 or curIdx + 1
         local nextScreen = nil
-        hs.alert.show(curIdx)
 
         if(direction == 'left') then
           nextScreen = (nextIdx < 1) and displays[#displays] or displays[nextIdx]

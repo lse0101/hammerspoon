@@ -1,3 +1,5 @@
+prevFrameSize = {}
+
 function getScreenIdx(displays, screen)
   for i = 1, #displays do
     if(displays[i] == screen) then
@@ -36,6 +38,7 @@ function moveToDisplay(direction)
         local curIdx = getScreenIdx(displays, win:screen())
         local nextIdx = (direction == 'left') and curIdx - 1 or curIdx + 1
         local nextScreen = nil
+        hs.alert.show(curIdx)
 
         if(direction == 'left') then
           nextScreen = (nextIdx < 1) and displays[#displays] or displays[nextIdx]
@@ -75,6 +78,30 @@ function decreaseWindowSize()
   adjustWindowSize('-')
 end
 
+function maximizeWindow()
+  local win = hs.window.focusedWindow()
+  local winFrame = win:frame()
+  
+  prevFrameSize[win:id()] = hs.geometry.copy(winFrame)
+
+  if(win) then
+    hs.grid.maximizeWindow(win)
+  end
+
+end
+
+
+function minimizeWindow()
+  local win = hs.window.focusedWindow()
+  local winFrame = win:frame()
+  
+  if(win) then
+    win:setFrame(prevFrameSize[win:id()])
+    prevFrameSize[win:id()] = nil
+  end
+
+end
+
 
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'l', moveToDisplay('right'))
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'h', moveToDisplay('left'))
@@ -84,3 +111,5 @@ hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, ']', increaseWindowSize)
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, '[', decreaseWindowSize)
+hs.hotkey.bind({'cmd', 'ctrl'}, 'm', maximizeWindow)
+hs.hotkey.bind({'cmd', 'ctrl', 'shift'}, 'm', minimizeWindow)

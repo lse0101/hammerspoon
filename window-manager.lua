@@ -1,11 +1,22 @@
 prevFrameSize = {}
+allScreens = {'Built-in Retina Display', 'S27R35x', 'DELL P2422H'}
 
-function getScreenIdx(displays, screen)
-  for i = 1, #displays do
-    if(displays[i] == screen) then
-      return i 
+function getScreenIdx(name)
+  for i = 1, #allScreens do
+    if(allScreens[i] == name) then
+      return i
     end
   end
+end
+
+function getScreen(name)
+  local screens = hs.screen.allScreens()
+  for i = 1, #screens do
+    if(screens[i]:name() == name) then
+      return screens[i]
+    end
+  end
+
 end
 
 function moveWindow(direction)
@@ -33,16 +44,15 @@ end
 
 function moveToDisplay(direction)
     return function()
-        local displays = hs.screen.allScreens()
         local win = hs.window.focusedWindow()
-        local curIdx = getScreenIdx(displays, win:screen())
+        local curIdx = getScreenIdx(win:screen():name())
         local nextIdx = (direction == 'left') and curIdx - 1 or curIdx + 1
         local nextScreen = nil
 
         if(direction == 'left') then
-          nextScreen = (nextIdx < 1) and displays[#displays] or displays[nextIdx]
+          nextScreen = (nextIdx < 1) and getScreen(allScreens[#allScreens]) or getScreen(allScreens[nextIdx])
         else
-          nextScreen = (nextIdx > #displays) and displays[1] or displays[nextIdx]
+          nextScreen = (nextIdx > #allScreens) and getScreen(allScreens[1]) or getScreen(allScreens[nextIdx])
         end
 
         win:moveToScreen(nextScreen, false, true)
@@ -104,10 +114,10 @@ end
 
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'l', moveToDisplay('right'))
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'h', moveToDisplay('left'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', moveWindow('left'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', moveWindow('right'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', moveWindow('left'), nil, moveWindow('left'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', moveWindow('right'), nil, moveWindow('right'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'), nil, moveWindow('down'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'), nil, moveWindow('up'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, ']', increaseWindowSize)
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, '[', decreaseWindowSize)
 hs.hotkey.bind({'cmd', 'ctrl'}, 'm', maximizeWindow)

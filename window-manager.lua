@@ -1,5 +1,5 @@
-prevFrameSize = {}
 allScreens = {'Built-in Retina Display', 'S27R35x', 'DELL P2422H'}
+sizeUnit = 50
 
 function getScreenIdx(name)
   for i = 1, #allScreens do
@@ -79,37 +79,39 @@ function adjustWindowSize(action)
 
 end
 
-function increaseWindowSize()
-  adjustWindowSize('+')
-end
+function adjustWindowWidth(widthArrow)
 
-function decreaseWindowSize()
-  adjustWindowSize('-')
-end
+  return function()
+    local win = hs.window.focusedWindow()
+    local frame = win:frame()
 
-function maximizeWindow()
-  local win = hs.window.focusedWindow()
-  local winFrame = win:frame()
-  
-  prevFrameSize[win:id()] = hs.geometry.copy(winFrame)
-
-  if(win) then
-    hs.grid.maximizeWindow(win)
+    if(widthArrow == 'left') then
+      frame.w = frame.w - sizeUnit 
+    else
+      frame.w = frame.w + sizeUnit 
+    end
+      
+    win:setFrame(frame)
   end
-
+    
 end
 
+function adjustWindowHeight(heightArrow)
 
-function minimizeWindow()
-  local win = hs.window.focusedWindow()
-  local winFrame = win:frame()
-  
-  if(win) then
-    win:setFrame(prevFrameSize[win:id()])
-    prevFrameSize[win:id()] = nil
+  return function()
+    local win = hs.window.focusedWindow()
+    local frame = win:frame()
+
+    if(heightArrow == 'up') then
+      frame.h = frame.h - sizeUnit 
+    else
+      frame.h = frame.h + sizeUnit 
+    end
+      
+    win:setFrame(frame)
   end
-
 end
+
 
 
 hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'l', moveToDisplay('right'))
@@ -118,7 +120,7 @@ hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'h', moveWindow('left'), nil, moveWindow(
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'l', moveWindow('right'), nil, moveWindow('right'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'j', moveWindow('down'), nil, moveWindow('down'))
 hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'k', moveWindow('up'), nil, moveWindow('up'))
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, ']', increaseWindowSize)
-hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, '[', decreaseWindowSize)
-hs.hotkey.bind({'cmd', 'ctrl'}, 'm', maximizeWindow)
-hs.hotkey.bind({'cmd', 'ctrl', 'shift'}, 'm', minimizeWindow)
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'Left', adjustWindowWidth('left'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'Right', adjustWindowWidth('right'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'Up', adjustWindowHeight('up'))
+hs.hotkey.bind({'cmd', 'ctrl', 'alt'}, 'Down', adjustWindowHeight('down'))
